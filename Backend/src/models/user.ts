@@ -20,7 +20,9 @@ country:string;
 
  userSchema.pre("save", async function (next) {
    if (this.isModified("password")) {
-     this.password = await bcrypt.hash(this.password, 8);
+      const user = this as mongoose.Document & UserType;
+
+     user.password = await bcrypt.hash(user.password, 8);
    }
    next();
  });
