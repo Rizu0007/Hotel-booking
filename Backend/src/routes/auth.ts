@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import "dotenv/config"
 import { check, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs'
+import { verify } from 'crypto';
 
 const router=express.Router();
 
@@ -56,4 +57,8 @@ router.post(
       }
     }
   );
+
+  router.get("/verfity-token" , verifyToken , (req:Request , res:Response)=>{
+    res.status(200).send({userId:req.userId})
+  })
 export default router;
