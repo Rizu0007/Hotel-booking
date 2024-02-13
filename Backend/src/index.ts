@@ -5,16 +5,16 @@ import mongoose from 'mongoose';
 import userRoutes from './routes/users'
 import authRoutes from './routes/auth'
 
-import cookparser from 'cookies-parser'
+import cookieParser from "cookie-parser";
 mongoose.connect(process.env.MONGODB_CONNECTION as string)
 
 const app =express(); 
 app.use(express.json());
-app.use(cookparser());
+app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 app.use(cors({
-    // origin:process.env.FRONTEND_URL,
-    // credentials:true,
+ origin:process.env.FRONTEND_URL,
+    credentials:true,
 }));
 
 app.use("/api/auth" ,authRoutes);
