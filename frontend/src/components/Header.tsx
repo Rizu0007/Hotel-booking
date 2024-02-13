@@ -1,15 +1,19 @@
 
 import { useAppContext } from "../contexts/AppContext";
-import { useMutation } from "react-query";
-import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from "react-query";
+import { Link, useNavigate } from 'react-router-dom';
 import * as apiClient from '../api-client';
 
 function Header() {
   const {isLoggedin , showToast} =useAppContext();
   const navigate=useNavigate();
-   
+   const queryClient=useQueryClient();
+
+
   const mutation=useMutation(apiClient.signout , {
-    onSuccess:()=>{
+    onSuccess: async()=>{
+      await queryClient.invalidateQueries("validateToken");
+
   showToast({message:"SignOut !" , type:"SUCCESS"})    
   navigate("/")
   
@@ -54,8 +58,8 @@ function Header() {
           </button>
         </>  
        ):(
-        <button
-        className='px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#1d294f] bg-[#1d294f] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#1d294f]'>Login</button>
+        <Link to='/sign-In'
+        className='px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#1d294f] bg-[#1d294f] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#1d294f]'>Login</Link>
        )  }
         </ul>
       </div>

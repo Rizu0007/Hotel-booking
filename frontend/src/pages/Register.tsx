@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import * as apiClient from '../api-client';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useAppContext } from '../contexts/AppContext';
 import { useNavigate } from 'react-router-dom';
 export type RegisterFormData={
@@ -13,13 +13,16 @@ export type RegisterFormData={
 function Register() {
   const navigate=useNavigate();
   const {showToast}=useAppContext();
+  const queryClient=useQueryClient();
 
   const {register
      ,watch , 
      handleSubmit , 
      formState:{errors}}=useForm<RegisterFormData>();
 const mutation=useMutation(apiClient.register , {
-  onSuccess:()=>{
+  onSuccess: async()=>{
+    await queryClient.invalidateQueries("validateToken");
+
 showToast({message:"Registraion Success" , type:"SUCCESS"})    
 navigate("/")
 
@@ -101,7 +104,7 @@ const onSubmit=handleSubmit((data)=>{
               <label  className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Comfirm Password</label>
             </div>
             <div className="relative">
-              <button className="bg-cyan-500 text-white rounded-md px-4 py-1">Create Account</button>
+              <button className="bg-cyan-500 text-white  px-4 mx-5  rounded-xl py-1">Create Account</button>
             </div>
           </div>
         </div>
